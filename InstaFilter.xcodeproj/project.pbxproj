@@ -11,6 +11,8 @@
 		8A63740929E135ED003DB80E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A63740829E135ED003DB80E /* ContentView.swift */; };
 		8A63740B29E135ED003DB80E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A63740A29E135ED003DB80E /* Assets.xcassets */; };
 		8A63740E29E135ED003DB80E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A63740D29E135ED003DB80E /* Preview Assets.xcassets */; };
+		8A63741529E13625003DB80E /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A63741429E13625003DB80E /* ImagePicker.swift */; };
+		8A63741729E136A0003DB80E /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A63741629E136A0003DB80E /* ImageSaver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		8A63740829E135ED003DB80E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8A63740A29E135ED003DB80E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A63740D29E135ED003DB80E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8A63741429E13625003DB80E /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		8A63741629E136A0003DB80E /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				8A63740629E135ED003DB80E /* InstaFilterApp.swift */,
 				8A63740829E135ED003DB80E /* ContentView.swift */,
+				8A63741429E13625003DB80E /* ImagePicker.swift */,
+				8A63741629E136A0003DB80E /* ImageSaver.swift */,
 				8A63740A29E135ED003DB80E /* Assets.xcassets */,
 				8A63740C29E135ED003DB80E /* Preview Content */,
 			);
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A63740929E135ED003DB80E /* ContentView.swift in Sources */,
+				8A63741529E13625003DB80E /* ImagePicker.swift in Sources */,
 				8A63740729E135ED003DB80E /* InstaFilterApp.swift in Sources */,
+				8A63741729E136A0003DB80E /* ImageSaver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
