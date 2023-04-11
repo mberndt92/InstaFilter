@@ -12,27 +12,27 @@ import SwiftUI
 struct ContentView: View {
     
     enum SupportedFilters: String, CaseIterable {
-//        case ColorBlendMode = "Color Blend Mode"
+        case AreaAverage = "Area Average"
+        case Bloom
         case Crystallize
         case Edges
         case GaussianBlur = "Gaussian Blur"
         case MorphologyGradient = "Morphology Gradient"
         case Pixellate
         case SepiaTone = "Sepia Tone"
-//        case TwirlDistortion = "Twirl Distortion"
         case UnsharpMask = "Unsharp Mask"
         case Vignette
         
         func getFilter() -> CIFilter {
             switch self {
-//            case .ColorBlendMode: return .areaHistogram()
+            case .AreaAverage: return .areaAverage()
+            case .Bloom: return .bloom()
             case .Crystallize: return .crystallize()
             case .Edges: return .edges()
             case .GaussianBlur: return .gaussianBlur()
             case .MorphologyGradient: return .morphologyGradient()
             case .Pixellate: return .pixellate()
             case .SepiaTone: return .sepiaTone()
-//            case .TwirlDistortion: return .twirlDistortion()
             case .UnsharpMask: return .unsharpMask()
             case .Vignette: return .vignette()
             }
@@ -94,7 +94,7 @@ struct ContentView: View {
                     if showingRadiusSlider {
                         HStack {
                             Text("Radius")
-                            Slider(value: $filterRadius, in: 0...360)
+                            Slider(value: $filterRadius, in: 1...360)
                                 .onChange(of: filterRadius) { _ in applyFilter() }
                         }
                         .padding(.vertical)
