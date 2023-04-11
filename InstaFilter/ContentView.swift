@@ -11,9 +11,42 @@ import SwiftUI
 
 struct ContentView: View {
     
+    enum SupportedFilters: String, CaseIterable {
+//        case ColorBlendMode = "Color Blend Mode"
+        case Crystallize
+        case Edges
+        case GaussianBlur = "Gaussian Blur"
+        case MorphologyGradient = "Morphology Gradient"
+        case Pixellate
+        case SepiaTone = "Sepia Tone"
+//        case TwirlDistortion = "Twirl Distortion"
+        case UnsharpMask = "Unsharp Mask"
+        case Vignette
+        
+        func getFilter() -> CIFilter {
+            switch self {
+//            case .ColorBlendMode: return .areaHistogram()
+            case .Crystallize: return .crystallize()
+            case .Edges: return .edges()
+            case .GaussianBlur: return .gaussianBlur()
+            case .MorphologyGradient: return .morphologyGradient()
+            case .Pixellate: return .pixellate()
+            case .SepiaTone: return .sepiaTone()
+//            case .TwirlDistortion: return .twirlDistortion()
+            case .UnsharpMask: return .unsharpMask()
+            case .Vignette: return .vignette()
+            }
+        }
+    }
+    
     @State private var image: Image?
     @State private var filterIntensity = 0.5
+    @State private var filterRadius: Double = 100.0
+    @State private var filterScale: Double = 10.0
     
+    @State private var showingIntensitySlider = false
+    @State private var showingRadiusSlider = false
+    @State private var showingScaleSlider = false
     
     // Image Picker
     @State private var showingImagePicker = false
@@ -33,7 +66,7 @@ struct ContentView: View {
                     Rectangle()
                         .fill(.secondary)
                         .background(.regularMaterial)
-//                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
                     
                     Text("Tap to select picture")
                         .foregroundColor(.white)
@@ -47,21 +80,45 @@ struct ContentView: View {
                     showingImagePicker = true
                 }
                 
-                HStack {
-                    Text("Intensity")
-                    Slider(value: $filterIntensity)
-                        .onChange(of: filterIntensity) { _ in applyFilter() }
-                }
-                .padding(.vertical)
-                
-                HStack {
-                    Button("Change Filter") {
-                        showingFilterDialog = true
+                VStack {
+                    
+                    if showingIntensitySlider {
+                        HStack {
+                            Text("Intensity")
+                            Slider(value: $filterIntensity)
+                                .onChange(of: filterIntensity) { _ in applyFilter() }
+                        }
+                        .padding(.vertical)
                     }
                     
-                    Spacer()
+                    if showingRadiusSlider {
+                        HStack {
+                            Text("Radius")
+                            Slider(value: $filterRadius, in: 0...360)
+                                .onChange(of: filterRadius) { _ in applyFilter() }
+                        }
+                        .padding(.vertical)
+                    }
                     
-                    Button("Save", action: save)
+                    if showingScaleSlider {
+                        HStack {
+                            Text("Scale")
+                            Slider(value: $filterScale, in: 1...20)
+                                .onChange(of: filterScale) { _ in applyFilter() }
+                        }
+                        .padding(.vertical)
+                    }
+                    
+                    HStack {
+                        Button("Change Filter") {
+                            showingFilterDialog = true
+                        }
+                        
+                        Spacer()
+                        
+                        Button("Save", action: save)
+                            .disabled(inputImage == nil)
+                    }
                 }
             }
             .padding([.horizontal, .bottom])
@@ -71,13 +128,12 @@ struct ContentView: View {
                 ImagePicker(image: $inputImage)
             }
             .confirmationDialog("Select a filter", isPresented: $showingFilterDialog) {
-                Button("Crystallize") { setFilter(CIFilter.crystallize()) }
-                Button("Edges") { setFilter(CIFilter.edges()) }
-                Button("Gaussian Blur") { setFilter(CIFilter.gaussianBlur()) }
-                Button("Pixellate") { setFilter(CIFilter.pixellate()) }
-                Button("Sepia Tone") { setFilter(CIFilter.sepiaTone()) }
-                Button("Unsharp Mask") { setFilter(CIFilter.unsharpMask()) }
-                Button("Vignette") { setFilter(CIFilter.vignette()) }
+                
+                ForEach(SupportedFilters.allCases, id: \.self) { filter in
+                    Button(filter.rawValue) {
+                        setFilter(filter.getFilter())
+                    }
+                }
                 Button("Cancel", role: .cancel) { }
             }
         }
@@ -92,20 +148,26 @@ struct ContentView: View {
     }
     
     private func applyFilter() {
+        showingIntensitySlider = false
+        showingRadiusSlider = false
+        showingScaleSlider = false
+        
         let inputKeys = currentFilter.inputKeys
         
         if inputKeys.contains(kCIInputIntensityKey) {
+            showingIntensitySlider = true
             currentFilter.setValue(filterIntensity, forKey: kCIInputIntensityKey)
         }
         
         if inputKeys.contains(kCIInputRadiusKey) {
-            currentFilter.setValue(filterIntensity * 200, forKey: kCIInputRadiusKey)
+            showingRadiusSlider = true
+            currentFilter.setValue(Int(filterRadius), forKey: kCIInputRadiusKey)
         }
         
         if inputKeys.contains(kCIInputScaleKey) {
-            currentFilter.setValue(filterIntensity * 10, forKey: kCIInputScaleKey)
+            showingScaleSlider = true
+            currentFilter.setValue(Int(filterScale), forKey: kCIInputScaleKey)
         }
-        
         
         guard let outputImage = currentFilter.outputImage else { return }
         
